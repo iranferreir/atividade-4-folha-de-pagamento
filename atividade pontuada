@@ -1,0 +1,108 @@
+import os 
+
+def limpa_tela():
+    os.system("cls || clear")
+
+class funcionario():
+
+    def init(self, nome:str, senha:str):
+        self.nome = nome
+        self.senha = senha
+
+lista_funcionario = []
+
+def criando_matricula():
+    nome_cadastro = input("digite seu nome: ")
+    senha_cadastro = input("digite sua senha: ")
+    funcionario = funcionario(nome_cadastro, senha_cadastro)
+    lista_funcionario.append(funcionario)
+    limpa_tela()
+    print("Cadastro fieto com sucesso")
+
+def lendo_matricula():
+    while True:
+        nome_login = input("digite seu nome: ")
+        senha_login = input("digite sua senha: ")
+        for funcionario in lista_funcionario: 
+            if funcionario.nome == nome_login and funcionario.senha == senha_login:
+                limpa_tela()
+                print("Acesso liberado")
+                print(f"Seja bem vindo {funcionario.nome}!")
+                return funcionario
+        limpa_tela()
+        print("Tentew novemento") 
+
+def perguntando():
+    salario_bruto = float(input("digiteseu salario_bruto: "))
+    dependentes = int(input("deseja quantos dependentes voces tem: "))
+    vale_transporte = bool(input("digite receber o vale transporte(Sim / Não)?"))
+    vale_refeicão = float(input("digite o valor do vale refeição:"))
+    return salario_bruto, dependentes, vale_transporte, vale_refeicão 
+
+def IMSS(salario):
+    if salario <= 1100.00:
+        desconto = salario * 0.075
+        return desconto
+    elif salario >= 1100.01 and salario <= 2203.48:
+        desconto = salario * 0.09
+        return desconto      
+    elif salario >= 2203.49 and salario <= 3305.22:
+        desconto = salario * 0.12
+        return desconto 
+    elif salario >= 3305.23 and salario <= 6433.57:
+        desconto = salario * 0.14
+        return desconto       
+    else:
+        desconto = salario - 854.36
+        return desconto
+    
+def IRRF(salario, depedente):
+    if salario >= 2259.21 and salario <= 2826.65:
+        desconto = salario * 0.075
+        return desconto
+    elif salario >= 2826.66 and salario <= 3751.05:
+        desconto = salario * 0.15
+        return desconto
+    if salario >= 3751.06 and salario <= 4664.68:
+        desconto = salario * 0.225
+        return desconto    
+    if salario >= 4664.68:
+        desconto = salario * 0.275
+        return desconto
+    Edução_por_depedente = 189.59
+    Edução_total = depedente - Edução_por_depedente
+    return Edução_total
+
+def vale_transportes(salario, variavel_transporte):
+    if variavel_transporte == "sim":
+        desconto = salario * 0.06
+        return desconto
+    return 0
+
+def vale_refeições(salario, variavel_refieções):
+    desconto = vale_refeições * 0.20
+    return desconto
+
+def plano_de_saude(salario, dependente):
+    desconto = dependente * 150.00
+    return desconto
+limpa_tela()
+while True:
+    opcao = int(input("""Seja bem vindo oa sistema. o que desejafazer?
+1- Criar uma nova matricula
+2- Acessar conta ja existente 
+=>"""))
+    match opcao:
+        case 1:
+            criando_matricula()
+        case 2:
+            funcionario = lendo_matricula()
+            salario_bruto, dependentes, vale_transportes, vale_refeições = perguntando()
+            break
+desconto_inss = INSS(salario_bruto)
+desconto_irrf = IRRF(salario_bruto, dependentes)            
+desconto_vale_transporte = vale_transportes(salario_bruto, vale_transportes)
+desconto_vale_refeicao = vale_refeições(salario_bruto, vale_refeições)
+desconto_plano_de_saude = plano_de_saude(salario_bruto, dependentes)
+salario_liquido = salario_bruto - (desconto_inss + desconto_irrf + desconto_vale_transporte + desconto_vale_refeicao + desconto_plano_de_saude)
+print(f"{funcionario.nome}tem de salario liquido: R$ {salario_liquido:.2f}") 
